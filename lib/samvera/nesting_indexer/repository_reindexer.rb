@@ -44,6 +44,7 @@ module Samvera
       extend Forwardable
       def_delegator :configuration, :adapter
       def_delegator :configuration, :logger
+      def_delegator :configuration, :stop_on_failure
 
       # When we find a document, reindex it if it doesn't have a parent. If it has a parent, reindex the parent first.
       #
@@ -66,8 +67,9 @@ module Samvera
         id_reindexer.call(id: id, extent: extent)
         processed_ids << id
       rescue StandardError => e
+        logger.error("Failed: #{id}")
         logger.error(e)
-        raise Exceptions::ReindexingError.new(id, e)
+        raise Exceptions::ReindexingError.new(id, e) if stop_on_failure
       end
     end
   end

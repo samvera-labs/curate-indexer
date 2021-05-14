@@ -12,11 +12,12 @@ module Samvera
       def initialize(maximum_nesting_depth: DEFAULT_MAXIMUM_NESTING_DEPTH, logger: default_logger)
         self.maximum_nesting_depth = maximum_nesting_depth
         self.logger = logger
+        self.stop_on_failure = true
       end
 
-      attr_reader :maximum_nesting_depth, :logger
+      attr_reader :maximum_nesting_depth, :logger, :stop_on_failure
 
-      attr_writer :logger
+      attr_writer :logger, :stop_on_failure
 
       def maximum_nesting_depth=(input)
         @maximum_nesting_depth = input.to_i
